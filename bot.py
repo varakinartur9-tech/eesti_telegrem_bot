@@ -41,3 +41,12 @@ async def level(update,context):
             resize_keyboard=True
         )
     )
+    
+async def direction(update,context):
+
+    context.user_data["direction"] = update.message.text
+
+    await update.message.reply_text(
+        "Valmis!",
+        reply_markup=menu()
+    )
