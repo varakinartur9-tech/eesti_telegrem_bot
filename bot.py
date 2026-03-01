@@ -15,3 +15,29 @@ def menu():
         ["🔄 Reset"]
     ], resize_keyboard=True)
     
+    # START
+
+async def start(update:Update,context:ContextTypes.DEFAULT_TYPE):
+
+    await update.message.reply_text(
+        "Vali tase:",
+        reply_markup=ReplyKeyboardMarkup(
+            [["A1","A2"],["B1","B2"]],
+            resize_keyboard=True
+        )
+    )
+    
+    # LEVEL
+
+async def level(update,context):
+
+    context.user_data.clear()
+    context.user_data["level"] = update.message.text
+
+    await update.message.reply_text(
+        "Vali suund:",
+        reply_markup=ReplyKeyboardMarkup(
+            [["RU-EE","EE-RU"]],
+            resize_keyboard=True
+        )
+    )
