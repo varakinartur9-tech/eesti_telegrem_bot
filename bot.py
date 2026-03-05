@@ -50,3 +50,10 @@ async def direction(update,context):
         "Valmis!",
         reply_markup=menu()
     )
+    
+    # TRANSLATE
+
+def tr(word,direction):
+    if direction == "RU-EE":
+        return word[1],word[0]
+    return word[0],word[1]
