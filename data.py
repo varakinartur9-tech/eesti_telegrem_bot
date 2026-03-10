@@ -41,3 +41,14 @@ WORDS = {
 
 ]
 }
+TEXTS = {
+
+"A1":"Minu nimi on Anna. Ma elan väikeses linnas. Iga päev ma lähen kooli. Õhtul ma loen raamatut.",
+
+"A2":"Suvel me reisime mere äärde. Ilm on soe ja päike paistab. Me ujume ja mängime rannas.",
+
+"B1":"Haridus on inimese elus väga tähtis. Hea haridus annab rohkem võimalusi töö leidmiseks.",
+
+"B2":"Tänapäeva ühiskonnas mängib tehnoloogia suurt rolli. Majandus ja keskkond on omavahel seotud."
+
+}
