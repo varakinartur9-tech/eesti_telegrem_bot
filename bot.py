@@ -57,3 +57,18 @@ def tr(word,direction):
     if direction == "RU-EE":
         return word[1],word[0]
     return word[0],word[1]
+
+# ÕPI SÕNU
+
+async def learn(update,context):
+
+    level = context.user_data["level"]
+    direction = context.user_data["direction"]
+
+    text = "📚 Sõnad:\n\n"
+
+    for w in WORDS[level]:
+        q,a = tr(w,direction)
+        text += f"{q} — {a}\n"
+
+    await update.message.reply_text(text)
