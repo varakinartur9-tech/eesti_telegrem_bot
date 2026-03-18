@@ -72,3 +72,11 @@ async def learn(update,context):
         text += f"{q} — {a}\n"
 
     await update.message.reply_text(text)
+    
+    # TEXT
+
+async def read(update,context):
+
+    await update.message.reply_text(
+        TEXTS[context.user_data["level"]]
+    )
