@@ -80,3 +80,15 @@ async def read(update,context):
     await update.message.reply_text(
         TEXTS[context.user_data["level"]]
     )
+    
+#TEST START
+async def test_start(update,context):
+
+    context.user_data["mode"]="test"
+    context.user_data["words"]=WORDS[context.user_data["level"]].copy()
+    context.user_data["repeat"]={}
+    context.user_data["correct"]=0
+    context.user_data["wrong"]=0
+    context.user_data["mistakes"]=[]
+
+    await next_word(update,context)
