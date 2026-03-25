@@ -92,3 +92,35 @@ async def test_start(update,context):
     context.user_data["mistakes"]=[]
 
     await next_word(update,context)
+async def next_word(update,context):
+
+    if not context.user_data["words"]:
+        await test_finish(update,context)
+        return
+
+    word=random.choice(context.user_data["words"])
+    context.user_data["current"]=word
+
+    q,_=tr(word,context.user_data["direction"])
+
+    await update.message.reply_text(f"Tõlgi: {q}")
+
+
+async def test_answer(update,context):
+
+    word=context.user_data["current"]
+    q,a=tr(word,context.user_data["direction"])
+
+    if update.message.text.lower()==a.lower():
+        context.user_data["correct"]+=1
+    else:
+        context.user_data["wrong"]+=1
+        context.user_data["mistakes"].append(f"{q}-{a}")
+
+    count=context.user_data["repeat"].get(word,0)+1
+    context.user_data["repeat"][word]=count
+
+    if count>=2:
+        context.user_data["words"].remove(word)
+
+    await next_word(update,context)
