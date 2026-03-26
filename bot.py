@@ -124,3 +124,41 @@ async def test_answer(update,context):
         context.user_data["words"].remove(word)
 
     await next_word(update,context)
+async def test_finish(update,context):
+
+    correct=context.user_data["correct"]
+    wrong=context.user_data["wrong"]
+
+    total=correct+wrong
+    percent=int(correct/total*100) if total>0 else 0
+
+    text=f"""Test lõppetud 
+
+Õiged: {correct}
+Valed: {wrong}
+Tulemus: {percent}%"""
+
+    if context.user_data["mistakes"]:
+        text+="Vead:\n"
+        for m in context.user_data["mistakes"]:
+            text+=m+"\n"
+
+    await update.message.reply_text(text)
+
+    user=update.message.from_user.id
+
+    cursor.execute("SELECT * FROM stats WHERE user_id=?",(user,))
+    row=cursor.fetchone()
+
+    if not row:
+        cursor.execute("INSERT INTO stats VALUES(?,?,?,?)",
+                       (user,1,correct,wrong))
+    else:
+        cursor.execute(
+            "UPDATE stats SET tests=tests+1, correct=correct+?, wrong=wrong+? WHERE user_id=?",
+            (correct,wrong,user)
+        )
+
+    conn.commit()
+
+    context.user_data["mode"]=None
