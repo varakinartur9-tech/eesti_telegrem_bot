@@ -163,7 +163,7 @@ Tulemus: {percent}%"""
 
     context.user_data["mode"]=None
     
-    # ADD WORD
+    # LISATUD SÕNA
 
 async def add(update,context):
 
@@ -184,3 +184,26 @@ async def save(update,context):
 
     await update.message.reply_text("Lisatud")
     context.user_data["mode"]=None
+    # MINU WORDS
+
+async def show_words(update,context):
+
+    user=update.message.from_user.id
+
+    cursor.execute(
+        "SELECT word FROM my_words WHERE user_id=?",
+        (user,)
+    )
+
+    rows=cursor.fetchall()
+
+    if not rows:
+        await update.message.reply_text("Pole sõnu")
+        return
+
+    text="Minu sõnad:\n\n"
+
+    for r in rows:
+        text+=r[0]+"\n"
+
+    await update.message.reply_text(text)
