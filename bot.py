@@ -162,3 +162,25 @@ Tulemus: {percent}%"""
     conn.commit()
 
     context.user_data["mode"]=None
+    
+    # ADD WORD
+
+async def add(update,context):
+
+    context.user_data["mode"]="add"
+    await update.message.reply_text("Kirjuta sõna")
+
+
+async def save(update,context):
+
+    user=update.message.from_user.id
+    word=update.message.text
+
+    cursor.execute(
+        "INSERT INTO my_words VALUES(?,?)",
+        (user,word)
+    )
+    conn.commit()
+
+    await update.message.reply_text("Lisatud")
+    context.user_data["mode"]=None
