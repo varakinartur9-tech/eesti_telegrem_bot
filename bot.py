@@ -207,3 +207,39 @@ async def show_words(update,context):
         text+=r[0]+"\n"
 
     await update.message.reply_text(text)
+
+# STATISTIKA
+
+async def show_stats(update,context):
+
+    user=update.message.from_user.id
+
+    cursor.execute(
+        "SELECT tests,correct,wrong FROM stats WHERE user_id=?",
+        (user,)
+    )
+
+    row=cursor.fetchone()
+
+    if not row:
+        await update.message.reply_text("Statistika puudub")
+        return
+
+    tests,correct,wrong=row
+    total=correct+wrong
+    percent=int(correct/total*100) if total>0 else 0
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM my_words WHERE user_id=?",
+        (user,)
+    )
+
+    words=cursor.fetchone()[0]
+
+    await update.message.reply_text(
+        f"""Testid: {tests}
+Sõnu: {words}
+Õiged: {correct}
+Valed: {wrong}
+Tulemus: {percent}%"""
+    )
