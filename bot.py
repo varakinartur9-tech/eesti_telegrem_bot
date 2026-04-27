@@ -243,3 +243,50 @@ Sõnu: {words}
 Valed: {wrong}
 Tulemus: {percent}%"""
     )
+    #TÖÖTLEJA
+
+async def handle(update,context):
+
+    text=update.message.text
+
+    if text in ["A1","A2","B1","B2"]:
+        await level(update,context)
+
+    elif text in ["RU-EE","EE-RU"]:
+        await direction(update,context)
+
+    elif text=="📚 Õpi sõnu":
+        await learn(update,context)
+
+    elif text=="📖 Loe teksti":
+        await read(update,context)
+
+    elif text=="📝 Test":
+        await test_start(update,context)
+
+    elif text=="➕ Lisa sõna":
+        await add(update,context)
+
+    elif text=="📌 Minu sõnad":
+        await show_words(update,context)
+
+    elif text=="📊 Minu statistika":
+        await show_stats(update,context)
+
+    elif text=="🔄 Reset":
+        await reset(update,context)
+
+    elif context.user_data.get("mode")=="test":
+        await test_answer(update,context)
+
+    elif context.user_data.get("mode")=="add":
+        await save(update,context)
+
+
+app=ApplicationBuilder().token(TOKEN).build()
+
+app.add_handler(CommandHandler("start",start))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND,handle))
+
+print("Bot töötab...")
+app.run_polling()
