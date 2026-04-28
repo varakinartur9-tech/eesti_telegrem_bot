@@ -7,7 +7,8 @@ from database import cursor, conn
 
 TOKEN = ""
 
-def menu():
+def menu(): #  Создаёт главное меню с кнопками
+            #  Loob peamenüü nuppudega   
     return ReplyKeyboardMarkup([
         ["📚 Õpi sõnu","📖 Loe teksti"],
         ["📝 Test","➕ Lisa sõna"],
@@ -17,7 +18,8 @@ def menu():
     
     # START
 
-async def start(update:Update,context:ContextTypes.DEFAULT_TYPE):
+async def start(update:Update,context:ContextTypes.DEFAULT_TYPE): # Старт бота, предлагает выбрать уровень
+                                                                #  Boti käivitamine, pakub taseme valikut
 
     await update.message.reply_text(
         "Vali tase:",
@@ -30,7 +32,8 @@ async def start(update:Update,context:ContextTypes.DEFAULT_TYPE):
     # LEVEL
 
 async def level(update,context):
-
+#  Сохраняет выбранный уровень и предлагает выбрать направление
+#  Salvestab taseme ja pakub valida suuna
     context.user_data.clear()
     context.user_data["level"] = update.message.text
 
@@ -43,7 +46,8 @@ async def level(update,context):
     )
     
 async def direction(update,context):
-
+#  Сохраняет направление перевода и показывает меню
+#  Salvestab tõlkesuuna ja näitab menüüd
     context.user_data["direction"] = update.message.text
 
     await update.message.reply_text(
@@ -54,6 +58,8 @@ async def direction(update,context):
     # TRANSLATE
 
 def tr(word,direction):
+    #  Меняет слова местами в зависимости от направления перевода
+    #  Vahetab sõnad vastavalt tõlkesuunale
     if direction == "RU-EE":
         return word[1],word[0]
     return word[0],word[1]
@@ -61,6 +67,8 @@ def tr(word,direction):
 # ÕPI SÕNU
 
 async def learn(update,context):
+    #  Показывает список слов для выбранного уровня
+    #  Näitab sõnade nimekirja vastavalt tasemele
 
     level = context.user_data["level"]
     direction = context.user_data["direction"]
@@ -76,6 +84,8 @@ async def learn(update,context):
     # TEXT
 
 async def read(update,context):
+    #  Показывает текст для чтения
+    #  Näitab teksti lugemiseks
 
     await update.message.reply_text(
         TEXTS[context.user_data["level"]]
@@ -83,6 +93,8 @@ async def read(update,context):
     
 #TEST START
 async def test_start(update,context):
+    #  Начинает тест и обнуляет статистику
+    #  Alustab testi ja nullib statistika
 
     context.user_data["mode"]="test"
     context.user_data["words"]=WORDS[context.user_data["level"]].copy()
@@ -93,6 +105,8 @@ async def test_start(update,context):
 
     await next_word(update,context)
 async def next_word(update,context):
+    #  Выбирает случайное слово для следующего вопроса
+    #  Valib juhusliku sõna järgmiseks küsimuseks
 
     if not context.user_data["words"]:
         await test_finish(update,context)
@@ -107,6 +121,8 @@ async def next_word(update,context):
 
 
 async def test_answer(update,context):
+    #  Проверяет ответ пользователя и обновляет статистику
+    #  Kontrollib vastust ja uuendab statistikat
 
     word=context.user_data["current"]
     q,a=tr(word,context.user_data["direction"])
@@ -125,6 +141,8 @@ async def test_answer(update,context):
 
     await next_word(update,context)
 async def test_finish(update,context):
+    #  Завершает тест и показывает результат
+    #  Lõpetab testi ja näitab tulemust
 
     correct=context.user_data["correct"]
     wrong=context.user_data["wrong"]
@@ -166,12 +184,16 @@ Tulemus: {percent}%"""
     # LISATUD SÕNA
 
 async def add(update,context):
+    #  Включает режим добавления нового слова
+    #  Lülitab sisse sõna lisamise režiimi
 
     context.user_data["mode"]="add"
     await update.message.reply_text("Kirjuta sõna")
 
 
 async def save(update,context):
+    #  Включает режим добавления нового слова
+    #  Lülitab sisse sõna lisamise režiimi
 
     user=update.message.from_user.id
     word=update.message.text
@@ -187,6 +209,8 @@ async def save(update,context):
     # MINU WORDS
 
 async def show_words(update,context):
+    #  Показывает все добавленные пользователем слова
+    #  Näitab kasutaja lisatud sõnu
 
     user=update.message.from_user.id
 
@@ -211,6 +235,9 @@ async def show_words(update,context):
 # STATISTIKA
 
 async def show_stats(update,context):
+    #  Показывает статистику пользователя
+    #  Näitab kasutaja statistikat
+
 
     user=update.message.from_user.id
 
@@ -246,6 +273,8 @@ Tulemus: {percent}%"""
     #TÖÖTLEJA
 
 async def handle(update,context):
+    #  Обрабатывает все сообщения и вызывает нужные функции
+    #  Töötleb sõnumeid ja kutsub õiged funktsioonid
 
     text=update.message.text
 
