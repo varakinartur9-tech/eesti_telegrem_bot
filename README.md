@@ -24,7 +24,7 @@ Testimine
 GitHub haldus
 Töö haldamise keskkond
 
-Projektis kasutatakse Trello keskkonda ülesannete haldamiseks.
+
 Funktsioonid:
 Õpi sõnu
 Loe teksti
